@@ -1,5 +1,6 @@
 package hello.core.order;
 
+import hello.core.annotation.MainDiscountPolicy;
 import hello.core.discount.DiscountPolicy;
 import hello.core.member.Member;
 import hello.core.member.MemberRepository;
@@ -10,11 +11,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrderServiceImpl implements OrderService {
 
-   private final MemberRepository memberRepository;
-   private final DiscountPolicy discountPolicy;
+   private MemberRepository memberRepository;
+   private DiscountPolicy discountPolicy;
 
     @Autowired
-    public OrderServiceImpl(MemberRepository memberRepository, @Qualifier("mainDiscountPolicy") DiscountPolicy DiscountPolicy) {
+    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy DiscountPolicy) {
         this.memberRepository = memberRepository;
         this.discountPolicy = DiscountPolicy;
     }
@@ -27,6 +28,12 @@ public class OrderServiceImpl implements OrderService {
         return new Order(memberId, itemName, itemPrice, discountPrice);
     }
 
+
+    @Autowired
+    public DiscountPolicy setDiscountPolicy(DiscountPolicy discountPolicy) {
+        this.discountPolicy = discountPolicy;
+        return discountPolicy;
+    }
     //테스트 용도
     public MemberRepository getMemberRepository() {
         return memberRepository;
